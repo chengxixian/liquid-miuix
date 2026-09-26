@@ -57,11 +57,11 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 /**
  * 悬浮玻璃底栏。
  *
- * **本文件照抄参考实现 KSuRoot**（`hmascs/KSuRoot` 的 `ui/glass/GlassNavBarContent.kt`），
- * 参数取值与注释均为原文；改动只有两处：
- *  1. `AppMotion.press()` → `LiquidMotion.press()`（本工程的主题令牌，取值相同）；
- *  2. `collectIsPressedAsState()` → 直接收集 `interactions` 原始流
- *     （该扩展函数在本工程的 Compose 版本里不可见）。
+ * ## 来源
+ *
+ * 玻璃底座来自 **miuix 的 `miuix-blur`**（见 [Modifier.liquidGlass]）。
+ * 本文件是**本项目自己的实现** —— 滑块的位置驱动、拖动手感、形变算法都是这里写的，
+ * 不是从任何库里搬来的。参数经真机调校。
  *
  * ## 它比「换个颜色」复杂在哪
  *
