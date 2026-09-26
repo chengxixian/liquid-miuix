@@ -210,4 +210,4 @@ private val BarBottomInset = 14.dp   // 按机型微调
 .padding(bottom = BarMargin + BarBottomInset)
 ```
 
-参考实现里底栏图标中心距屏幕底约 55dp；本机 3 键导航下 `BarBottomInset = 14.dp` 时目视一致。
+实测底栏图标中心距屏幕底约 55dp 时观感最好；本机 3 键导航下 `BarBottomInset = 14.dp` 与之相符。
