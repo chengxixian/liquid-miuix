@@ -60,7 +60,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 /**
  * 示例 Activity。
  *
- * 重点看 [AppShell] 的结构 —— **这是整套方案里唯一必须照抄的部分**，
+ * 重点看 [AppShell] 的结构 —— **这是整套方案里唯一不能改的部分**，
  * 放错一层就会启动闪退（详见 docs/02-glass.md）。
  */
 class MainActivity : ComponentActivity() {
