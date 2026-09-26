@@ -10,3 +10,6 @@ build/
 local.properties
 *.hprof
 .kotlin/
+
+# 建目录用的占位文件，不需要提交
+.gitkeep
