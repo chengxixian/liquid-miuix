@@ -3,6 +3,19 @@
 这份文档解释 `library/.../glass/GlassSurface.kt` 里每一个数字是怎么来的。
 **结论都有实测依据**，不是「看着差不多」。
 
+## 底座从哪来
+
+效果链不是本项目发明的，来源要说清楚：
+
+| 层 | 来源 | 提供了什么 |
+|---|---|---|
+| 实现 | [`Kyant0/AndroidLiquidGlass`](https://github.com/Kyant0/AndroidLiquidGlass) | `drawBackdrop` / `LayerBackdrop` / `lens` / `vibrancy` / `Highlight` |
+| 集成 | [`compose-miuix-ui/miuix`](https://github.com/compose-miuix-ui/miuix) 的 `miuix-blur` | 上游的厂商集成版；类名逐一对应，另补齐 `progressiveBlur` / `noiseDither` / `blendColors` / `textureBlurEffect` |
+| **配方** | **本项目** | 参数取值与下面三条判据 —— 库文档没有这些 |
+| **结构约束** | **本项目** | 「玻璃必须在采集层之外」等规则 —— 违反会闪退，而崩溃栈指不到原因 |
+
+换句话说：**库给你画笔，这份文档给你怎么调**。下面每一条都是在一台台设备上试出来的。
+
 ---
 
 ## ⚠️ 先看这条：布局硬约束
