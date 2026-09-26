@@ -2,8 +2,9 @@
 
 **MIUI / HyperOS 风格 + 真·液态玻璃（含折射）的 Jetpack Compose 前端方案。**
 
-从参考实现 [KSuRoot](https://github.com/hmascs/KSuRoot) 的玻璃与主题实现中提炼，
-抽成可复用模块，并补上了踩坑记录。
+构建在 **miuix** 生态之上：玻璃来自 [`miuix-blur`](https://github.com/compose-miuix-ui/miuix)
+（它本身是 [`kyant0/backdrop`](https://github.com/Kyant0/AndroidLiquidGlass) 的厂商集成版），
+主题与组件来自 `miuix-ui`；本项目补的是**配方**（参数怎么调）与**结构约束**（怎么摆不会崩）。
 
 ![示例](docs/screenshot-home.png)
 
@@ -78,7 +79,8 @@ setContent {
 }
 ```
 
-`AppShell` 的结构**必须照抄** —— 具体原因见 [docs/02-glass.md](docs/02-glass.md)：
+`AppShell` 的结构**必须照抄** —— 这是库的绘制顺序决定的，不是风格选择。
+具体原因见 [docs/02-glass.md](docs/02-glass.md)：
 
 ```kotlin
 Box(Modifier.fillMaxSize()) {
@@ -225,7 +227,27 @@ miuix 0.9.4 自己会把 material3 提到 **alpha22**。你声明别的版本
 
 ---
 
-## 许可
+## 许可与致谢
 
-Apache-2.0。玻璃配方与主题实现源自 [KSuRoot](https://github.com/hmascs/KSuRoot)（Apache-2.0），
-参数取值与踩坑结论来自其源码注释，一并保留致谢。
+Apache-2.0。
+
+**实现来源**（这部分是底座，不是本项目的贡献）：
+
+| 来源 | 内容 |
+|---|---|
+| [`compose-miuix-ui/miuix`](https://github.com/compose-miuix-ui/miuix) · Apache-2.0 | `miuix-ui` 组件与主题、`miuix-blur` 的 backdrop 管线与效果（`progressiveBlur` / `noiseDither` / `blendColors` / `textureBlurEffect` 是它相对上游补齐的） |
+| [`Kyant0/AndroidLiquidGlass`](https://github.com/Kyant0/AndroidLiquidGlass) · Apache-2.0 | `backdrop` 的原始实现（`drawBackdrop` / `LayerBackdrop` / `lens` / `vibrancy` / `Highlight`） |
+| [`materialkolor`](https://github.com/jordond/materialkolor) | Monet 动态取色 |
+
+**本项目补的部分**：
+
+1. **配方** —— 模糊 5dp、折射 28/40dp、3% 冷灰填充、12% 颗粒这些取值，
+   以及「折射位移 ≥ 2× 模糊半径」「背景要比卡片暗一档」「玻璃必须有独立填充色」
+   这三条判据。这些是一台台设备试出来的，不是库文档给的；
+2. **结构约束** —— 玻璃必须在采集层之外、只能挂在空 Box 上。
+   违反会渲染树栈溢出闪退，且崩溃栈完全指不到原因；
+3. **可复用封装** —— 底栏滑块、设计令牌、通用组件。
+
+早期的参数校准借用了 [KSuRoot](https://github.com/hmascs/KSuRoot) 的实测记录
+（它是最早把这套库用在生产项目里的参考之一），特此致谢。
+
