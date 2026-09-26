@@ -43,7 +43,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 /**
  * 组件库。
  *
- * 与参考实现（KSuRoot）保持同一套写法：
+ * 与 miuix 自身的写法保持一致：
  *
  * - **卡片用 miuix `Card`**，不铺玻璃。它的默认色是 `surfaceContainer`
  *   （浅色纯白 / 深色 #242424），而页面底色是 `surface`（浅色 #F7F7F7 / 深色 #000）——
@@ -102,7 +102,7 @@ typealias ColumnScopeAlias = androidx.compose.foundation.layout.ColumnScope
 /**
  * 信息行：`[图标 24dp] 标题(title4) / 值(body2, onSurfaceVariantSummary)`。
  *
- * 这是参考实现里最常用的行样式（设备信息、内核版本等都用它）。
+ * 这是最常用的行样式（图标 + 标题 + 副标题 + 尾随控件）。
  */
 @Composable
 fun LiquidInfoRow(
@@ -258,7 +258,7 @@ fun LiquidPill(
 
 /**
  * 状态提示条：`[图标] 文字`，用语义色着色而不铺满色块
- * （对应参考实现里那条安全补丁警示）。
+ * （用于错误、警示、说明这类整条提示）。
  */
 @Composable
 fun LiquidStatusBanner(
