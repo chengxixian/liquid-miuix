@@ -31,7 +31,7 @@ import top.yukonga.miuix.kmp.theme.ThemePaletteStyle
 /**
  * 主题层。
  *
- * 与本项目参考的 KSuRoot（`hmascs/KSuRoot`）保持同一套做法：
+ * 与 miuix 自身的做法保持一致：
  *
  *  - **颜色一律取 miuix 语义色**（`MiuixTheme.colorScheme.*`），不写死十六进制。
  *    miuix 的 `surface` 是页面底色、`surfaceContainer` 是卡片底色 ——
@@ -40,7 +40,7 @@ import top.yukonga.miuix.kmp.theme.ThemePaletteStyle
  *    让少数必须用 Material3 的组件（Dialog / BottomSheet / OutlinedTextField）
  *    与 miuix 组件共用同一套语义色，避免"对话框是 Material 紫、页面是 MIUI 蓝"。
  *  - 用 [MaterialExpressiveTheme] + `MotionScheme.expressive()`，
- *    这是参考实现的手感来源。
+ *    这是那种「Q 弹」手感的来源。
  */
 
 /** MIUI 默认蓝。miuix 自身 `lightColorScheme()` 的 primary 就是它。 */
@@ -75,7 +75,7 @@ object LiquidSpacing {
     /** 行内元素间距。 */
     val inline = 8.dp
 
-    /** 图标与文字块之间（参考实现的列表项用它）。 */
+    /** 图标与文字块之间（列表项用它）。 */
     val leading = 13.dp
 
     /** 相关内容块之间。 */
@@ -98,7 +98,7 @@ private val LiquidShapes = Shapes(
 /**
  * 排版尺度。
  *
- * 参考实现把各处散落的 10/12/14/15/16/18/20sp 收敛成一套固定阶梯，
+ * 把各处散落的 10/12/14/15/16/18/20sp 收敛成一套固定阶梯，
  * 界面协调度的问题基本都出在这里。以下沿用同一套数值。
  */
 private val LiquidTypography = Typography(
@@ -273,7 +273,7 @@ fun LiquidTheme(
  *
  * 核心原则：**一律用低刚度弹簧，不用线性 tween**。
  * 低刚度让动画有"跟手 + 回弹"的尾韵，MediumBouncy 提供一次可感知的过冲 ——
- * 这就是参考实现那种"Q 弹"手感的来源。
+ * 这就是那种"Q 弹"手感的来源。
  *
  * 用泛型函数而非共享 val：`SpringSpec<T>` 的目标类型要由调用处推断，
  * 写成 `val bouncy = spring<Float>(...)` 会让 Dp/Color/Offset 动画无法复用同一令牌。
