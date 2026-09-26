@@ -74,6 +74,28 @@ $total = $tracked.Count
 Write-Host "==> 共 $total 个文件" -ForegroundColor Cyan
 
 $ensured = @{}
+
+# 先拉一次远端树，把**已存在**的目录记下来。
+# 否则脚本每次运行都会重新建 .gitkeep —— 明明目录早就在了，还平白多出一堆占位文件。
+Write-Host "==> 读取远端已有的目录" -ForegroundColor Cyan
+$remoteTree = Invoke-Gh @("repos/$Owner/$Repo/git/trees/$Branch`?recursive=1")
+$existingDirs = @{}
+if ($remoteTree.ok) {
+    try {
+        $parsed = $remoteTree.out | ConvertFrom-Json
+        foreach ($entry in $parsed.tree) {
+            if ($entry.type -ne "blob") { continue }
+            $dir = Split-Path $entry.path -Parent
+            while (-not [string]::IsNullOrEmpty($dir)) {
+                $dir = $dir -replace '\\', '/'
+                $existingDirs[$dir] = $true
+                $dir = Split-Path $dir -Parent
+            }
+        }
+    } catch { }
+}
+Write-Host "  远端已有 $($existingDirs.Count) 个目录" -ForegroundColor Cyan
+
 function Ensure-Dir {
     param([string]$Dir)
     if ([string]::IsNullOrEmpty($Dir)) { return }
@@ -81,6 +103,10 @@ function Ensure-Dir {
     for ($d = 0; $d -lt $parts.Count; $d++) {
         $sub = ($parts[0..$d] -join '/')
         if ($ensured.ContainsKey($sub)) { continue }
+        if ($existingDirs.ContainsKey($sub)) {     # 远端已有，不用建
+            $ensured[$sub] = $true
+            continue
+        }
         $keep = "$sub/.gitkeep"
         $tmp = [System.IO.Path]::GetTempFileName()
         try {
