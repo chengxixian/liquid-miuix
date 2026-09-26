@@ -129,6 +129,30 @@
 
 ---
 
-本项目的液态玻璃配方与主题实现源自 KSuRoot
-(https://github.com/hmascs/KSuRoot)，同样以 Apache-2.0 发布。
-参数取值与踩坑结论来自其源码注释。在此致谢。
+THIRD-PARTY NOTICES
+
+本项目的实现建立在以下项目之上（均为 Apache-2.0 或兼容许可）：
+
+1. compose-miuix-ui/miuix  —  https://github.com/compose-miuix-ui/miuix
+   MIUI / HyperOS 风格的 Compose 组件库，提供 miuix-ui（组件与主题）、
+   miuix-blur（backdrop 管线与效果）、miuix-shader、miuix-icons。
+
+2. Kyant0/AndroidLiquidGlass  —  https://github.com/Kyant0/AndroidLiquidGlass
+   backdrop 的原始实现（drawBackdrop / LayerBackdrop / lens / vibrancy / Highlight）。
+   miuix-blur 是其厂商集成版：类名逐一对应，并补齐了 progressiveBlur /
+   noiseDither / blendColors / textureBlurEffect 等上游没有的效果。
+
+3. jordond/materialkolor  —  https://github.com/jordond/materialkolor
+   Monet 动态取色，用于从壁纸生成主题色。
+
+本项目自身的贡献是「配方」与「结构约束」：
+  - 玻璃参数取值（模糊 5dp、折射 28/40dp、3% 冷灰填充、12% 颗粒），
+    以及「折射位移 >= 2x 模糊半径」「背景要比卡片暗一档」
+    「玻璃必须有独立填充色」这三条判据；
+  - 布局结构规则：玻璃必须在采集层之外、只能挂在空 Box 上
+    （违反会导致渲染树栈溢出闪退）；
+  - 可复用封装：底栏滑块、设计令牌、通用组件。
+
+早期的参数校准借用了 KSuRoot (https://github.com/hmascs/KSuRoot) 的实测记录
+—— 它是最早把这套库用在生产项目里的参考之一，特此致谢。
+
