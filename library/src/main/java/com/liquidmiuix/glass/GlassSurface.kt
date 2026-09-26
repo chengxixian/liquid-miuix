@@ -29,23 +29,31 @@ import kotlin.random.Random
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 /**
- * 液态玻璃 —— **照抄参考实现 KSuRoot**（`hmascs/KSuRoot` 的 `ui/glass/GlassSurface.kt`）。
+ * 液态玻璃。
  *
- * 效果链、参数取值、注释均为原文；只改了包名与 `Radii` 的引用。
- * 依赖 `io.github.kyant0:backdrop` —— 它的 `lens`（折射）是「液态」与「磨砂」的分界。
+ * ## 来源
+ *
+ * 效果链本身来自 **miuix 的 `miuix-blur`** —— 它是
+ * [`kyant0/backdrop`](https://github.com/Kyant0/AndroidLiquidGlass) 的厂商集成版：
+ * 类名逐一对应（`drawBackdrop` / `LayerBackdrop` / `BackdropEffectScope` / `Highlight`），
+ * 并补齐了上游没有的 `progressiveBlur` / `noiseDither` / `blendColors` / `textureBlurEffect`。
+ * 本文件用的是 `io.github.kyant0:backdrop-android`（上游原版）。
+ *
+ * **本项目补的是配方与结构约束**：下面那些参数取值（5dp / 28dp / 40dp / 3% / 12%）
+ * 和「玻璃必须在采集层之外」这条规则，都不是库文档给的，是试出来的。
  *
  * ## 效果链（按书写顺序执行，库内部是 `RenderEffect.createChainEffect(prev, next)`）
  *
  * `vibrancy()`（饱和度 ×1.5）→ `blur()`（毛玻璃）→ `lens()`（折射 + 可选色散）
  *
- * ### 关于「折射被模糊吃掉」这个说法（原文已纠正）
+ * ### 关于「折射被模糊吃掉」这个说法 —— 不成立
  * 曾经认为 blur 放在 lens 前面会把背景糊平、令折射失效。反编译着色器后确认**不成立**：
  * lens 编译成的 RuntimeShader 主函数核心是 `refractedCoord = coord + d * grad` —— 纯位移。
  * 位移不改变对比度，所以「背景是平的 ⇒ 折射看不见」与模糊无关。
  * `blur → lens` 恰恰是 Apple 的做法：先糊背景再掰弯它，而色散彩边依旧锐利
  * （彩边是着色器把 RGB 三通道错位采样得到的，与输入糊不糊无关）。
  *
- * ### 折射强度怎么调（原文实测结论）
+ * ### 折射强度怎么调（实测结论）
  * 这套库没有 `refractiveIndex` 这种折射率标量，能调的是：
  * - [refractionHeight]：折射边带宽度，只有距边缘这么宽的一条带内才发生位移；
  * - [refractionAmount]：边缘处最大位移像素数；
