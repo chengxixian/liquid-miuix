@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      关键：windowBackground 必须透明，且 Activity 走 enableEdgeToEdge()。
+      否则系统会在应用内容之下再铺一层不透明底色，采集层录不到真正的屏幕内容。
+    -->
+    <style name="Theme.LiquidMiuix" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
